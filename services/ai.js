@@ -105,7 +105,7 @@ async function json(instructions, input) {
 
 export async function roadmap(context) {
   const output = await json(
-    'You are an educational career guidance assistant. Use only supplied career requirements. Never invent requirements, external URLs, or promise employment. Prioritize gaps and return valid JSON: {summary, strengths, priorityGaps, roadmap:[{stage,title,skills,reason,tasks,project,estimatedDuration}],careerAdvice,interviewFocus}.',
+    'You are an educational career guidance assistant. Use only supplied career requirements and the verified skill gap. Never invent requirements, external URLs, salaries, or promise employment. Build a deep but practical roadmap: order the real gaps from foundational to advanced, explain why each stage matters, include 3-5 concrete tasks, one measurable project, an estimated duration, career advice, and interview focus. Return valid JSON: {summary, strengths, priorityGaps, roadmap:[{stage,title,skills,reason,tasks,project,estimatedDuration}],careerAdvice,interviewFocus}.',
     context
   );
 
