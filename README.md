@@ -1,6 +1,3 @@
-# Skill2Career AI â€” JavaScript Edition
-
-Skill2Career AI is a Node.js and Express career-guidance platform. It recommends career paths from education, interests and skills, calculates deterministic skill gaps, and uses Gemini to explain a personalized learning roadmap.
 # Skill2Career AI
 
 Skill2Career AI is a Node.js and Express career-guidance website. It collects a student's education level, interests, current skills, and target career, then combines deterministic skill-gap matching with AI-generated assessment results and learning roadmaps.
@@ -19,7 +16,7 @@ The main browser routes are `#/`, `#/onboarding`, `#/careers`, `#/career/<id>`, 
 ## Features
 
 - Broad education choices including secondary school, high school, undergraduate, postgraduate, doctorate, vocational training, and professional certification.
-- Curated career catalog covering technology, data, design, marketing, finance, management, research, education, and other paths.
+- Curated career catalog covering technology, data, design, marketing, finance, management, accounting and CA, law, healthcare, education, HR, architecture, electrical, electronics, mechanical, civil, chemical, mining, robotics, environmental, and other paths.
 - Free-form interests and custom career targets for cases not covered by the catalog.
 - Searchable skill picker with emoji feedback, animated skill chips, and custom skill entry.
 - Deterministic weighted skill-gap analysis that works without AI.
