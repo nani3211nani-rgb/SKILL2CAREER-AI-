@@ -118,7 +118,7 @@ export async function roadmap(context) {
 
 export async function assessment(context) {
   const output = await json(
-    'You are a beginner-friendly career assessment assistant. Use only the supplied student profile and target career requirements. Return simple JSON: {summary:string,careerMatch:{title:string,score:number,reason:string},strengths:string[],missingSkills:[{name:string,why:string,priority:string}],nextSteps:string[]}. Score from 0 to 100. List only skills that are missing or need improvement. Use short sentences, plain language, and no external URLs or employment promises.',
+    'You are a beginner-friendly career assessment assistant. Understand free-form interest and career phrases by their meaning, including spelling variations and related subjects. Use only the supplied student profile and target career requirements; if a typed career has no requirements, say what can and cannot be assessed and use the student profile to suggest sensible next steps. Return simple JSON: {summary:string,careerMatch:{title:string,score:number,reason:string},strengths:string[],missingSkills:[{name:string,why:string,priority:string}],nextSteps:string[]}. Score from 0 to 100. List only skills that are missing or need improvement. Use short sentences, plain language, and no external URLs or employment promises.',
     context
   );
   if (!output.summary || !output.careerMatch?.title || !Array.isArray(output.strengths) || !Array.isArray(output.missingSkills) || !Array.isArray(output.nextSteps)) {
