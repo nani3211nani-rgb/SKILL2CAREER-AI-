@@ -1,0 +1,14 @@
+import {Router} from 'express';
+import {catalog,store} from '../services/store.js';
+import {user,requireAuth} from '../middleware/auth.js';
+import {analyzeSkillGap} from '../services/skillGap.js';
+import {recommend} from '../services/careerMatch.js';
+const r=Router();
+r.get('/skills',(req,res)=>res.json({skills:catalog.skills}));
+r.get('/careers/skills',(req,res)=>res.json({skills:catalog.skills}));
+r.get('/careers',(req,res)=>{const u=user(req);res.json({careers:catalog.careers.map(c=>({...c,matchScore:u?analyzeSkillGap(u.skills,c.skills).matchScore:null}))});});
+r.get('/careers/:id',(req,res)=>{const career=store.findCareer(req.params.id);if(!career)return res.status(404).json({error:'Career not found'});const u=user(req);res.json({career:{...career,skillGap:u?analyzeSkillGap(u.skills,career.skills):null}});});
+r.get('/career-recommendations',requireAuth,(req,res)=>res.json({recommendations:recommend(user(req),catalog.careers)}));
+r.get('/skill-gap/:id',requireAuth,(req,res)=>{const career=store.findCareer(req.params.id);if(!career)return res.status(404).json({error:'Career not found'});res.json({skillGap:analyzeSkillGap(user(req).skills,career.skills)});});
+r.get('/resources',(req,res)=>res.json({resources:[]}));
+export default r;
