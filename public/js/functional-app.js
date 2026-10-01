@@ -14,11 +14,27 @@ const api = async (url, options = {}) => {
   if (!response.ok) throw new Error(data.error || `Request failed (${response.status}).`);
   return data;
 };
+const renderSiteAttribution = () => {
+  if (document.querySelector('.site-attribution')) return;
+  const footer = document.createElement('footer');
+  footer.className = 'site-attribution';
+  footer.setAttribute('aria-label', 'Development credit');
+  footer.innerHTML = '<span class="site-attribution-label">Developed by</span><div class="site-attribution-names"><span tabindex="0">Poorna Chander</span><span tabindex="0">Srinidhi</span><span tabindex="0">Shiwani</span></div><span class="site-attribution-school">B.Com (CA) 3rd Year · VJIAS</span>';
+  app.append(footer);
+};
 const renderShell = (content, matchScore = null) => {
   const currentPath = location.hash.replace(/^#/, '') || '/';
   const activePath = currentPath === '/onboarding' ? '/assessment' : currentPath;
   const nav = navItems.map(([label, icon, href]) => `<a class="nav-item${activePath === href.slice(1) || (href === '#/' && activePath === '/') ? ' active' : ''}" href="${href}"><i class="bi ${icon} nav-icon" aria-hidden="true"></i><span>${label}</span></a>`).join('');
   app.innerHTML = `<div class="app-shell"><aside class="sidebar"><a class="brand-block sidebar-wordmark" href="#/"><div><div class="brand-name"><span>Skill2Career</span> AI</div><div class="brand-subtitle">YOUR CAREER, CLEARLY.</div></div></a><div class="workspace-label">WORKSPACE</div><nav class="side-nav">${nav}</nav><div class="readiness-mini"><div class="mini-label"><i class="bi bi-activity" aria-hidden="true"></i> CAREER PULSE</div><div class="journey-side-row"><span>Career Target</span><strong class="journey-sidebar-target">Not selected</strong></div><div class="journey-side-row"><span>Readiness</span><strong class="journey-sidebar-readiness">Not assessed</strong></div></div><div class="sidebar-footer">Built for your next move</div></aside><main class="content-panel"><div class="topbar"><div><span class="topbar-kicker">SKILL2CAREER AI</span><span class="topbar-divider"></span><span class="topbar-status"><i class="bi bi-circle-fill" aria-hidden="true"></i> Your growth workspace</span></div><a class="topbar-help" href="#/assessment"><i class="bi bi-lightning-charge-fill" aria-hidden="true"></i> Update profile</a></div>${content}</main></div>`;
+  renderSiteAttribution();
+  if (activePath === '/assessment') {
+    const topbarHelp = app.querySelector('.topbar-help');
+    if (topbarHelp) {
+      topbarHelp.href = '#/';
+      topbarHelp.innerHTML = '<i class="bi bi-arrow-left" aria-hidden="true"></i> Back to home';
+    }
+  }
   Promise.all([getProfile(), getReadiness(), api('/api/career-recommendations')]).then(([profile, readiness, matches]) => {
     const target = app.querySelector('.journey-sidebar-target');
     const score = app.querySelector('.journey-sidebar-readiness');
@@ -53,8 +69,38 @@ const getProfile = () => api('/api/student/profile').then((result) => result.stu
 const getReadiness = () => api('/api/career-readiness');
 const getCareers = () => api('/api/careers').then((result) => result.careers || []);
 const list = (items, renderItem, none) => Array.isArray(items) && items.length ? items.map(renderItem).join('') : `<li>${esc(none)}</li>`;
+const detailItems = (items) => Array.isArray(items) ? items.filter(Boolean) : [];
+const printList = (items, emptyMessage = 'No details recorded yet.') => {
+  const values = detailItems(items);
+  return values.length ? `<ul>${values.map((item) => `<li>${esc(typeof item === 'string' ? item : item.title || item.name || item.description || item.url || '')}</li>`).join('')}</ul>` : `<p class="print-muted">${esc(emptyMessage)}</p>`;
+};
+const openRoadmapPrintView = ({ profile, readiness, roadmap, roadmapSteps, visibleActions }) => {
+  const printWindow = window.open('', '_blank', 'width=1100,height=800');
+  if (!printWindow) {
+    window.alert('Please allow pop-ups to download your roadmap PDF.');
+    return;
+  }
+  const targetCareer = readiness.targetCareer || profile.careerGoal || 'Career target';
+  const matchScore = readiness.skillGap?.matchScore ?? roadmap?.matchScore ?? 0;
+  const requiredSkills = detailItems(readiness.skillGap?.requiredSkills).map((item) => `${item.skillName} · ${item.requiredLevel}`);
+  const profileSkills = detailItems(profile.skills).map((item) => `${item.skillName} · ${item.proficiency}`);
+  const stepMarkup = roadmapSteps.map((step, index) => {
+    const resources = detailItems(step.resources);
+    const resourceMarkup = resources.length ? `<ul>${resources.map((resource) => {
+      const label = typeof resource === 'string' ? resource : resource.title || resource.name || resource.url || 'Learning resource';
+      return resource.url ? `<li><a href="${esc(resource.url)}">${esc(label)}</a></li>` : `<li>${esc(label)}</li>`;
+    }).join('')}</ul>` : '<p class="print-muted">Use the suggested search and practice tasks for this phase.</p>';
+    return `<article class="print-step" id="phase-${index + 1}"><div class="print-step-number">${index + 1}</div><div><div class="print-step-kicker">PHASE ${index + 1} · ${esc(step.skill || 'Career development')}</div><h2>${esc(step.title || `Career development phase ${index + 1}`)}</h2><p>${esc(step.description || 'Build evidence and confidence for this phase of your career journey.')}</p><div class="print-detail-grid"><section><h3>Tasks</h3>${printList(step.tasks, 'Practice and document progress for this phase.')}</section><section><h3>Projects and evidence</h3>${printList(step.projects, 'Add a project or work sample when ready.')}</section><section><h3>Resources</h3>${resourceMarkup}</section></div></div></article>`;
+  }).join('');
+  const profileSummary = [profile.education?.degree, profile.education?.branch].filter(Boolean).join(' · ') || 'Education not recorded';
+  const generatedDate = new Intl.DateTimeFormat(undefined, { dateStyle: 'long' }).format(new Date());
+  printWindow.document.write(`<!doctype html><html lang="en"><head><meta charset="utf-8"><title>${esc(targetCareer)} roadmap | Skill2Career AI</title><style>@page{size:A4;margin:16mm 15mm}*{box-sizing:border-box}body{margin:0;color:#17263b;background:#fff;font-family:Arial,Helvetica,sans-serif;font-size:10.5pt;line-height:1.55}a{color:#0b62c4;text-decoration:none}.report{max-width:820px;margin:auto}.cover{padding:12mm 0 10mm;border-bottom:3px solid #0f9f8b}.brand{color:#0f9f8b;font-size:12pt;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.cover h1{max-width:670px;margin:22mm 0 4mm;color:#102f4a;font-family:Georgia,serif;font-size:34pt;line-height:1.05;letter-spacing:-.03em}.cover p{max-width:610px;color:#617186;font-size:12pt}.cover-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12mm}.pill{padding:6px 10px;border:1px solid #cfe0e8;border-radius:99px;background:#f2faf8;color:#176f69;font-size:9pt;font-weight:700}.report-nav{display:flex;flex-wrap:wrap;gap:14px;margin:8mm 0 10mm;padding:10px 0;border-bottom:1px solid #dfe8ed;font-size:9pt;font-weight:700}.section{break-inside:avoid;margin:10mm 0}.section-title{margin:0 0 5mm;color:#102f4a;font-family:Georgia,serif;font-size:20pt}.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.summary-card{padding:12px;border:1px solid #dbe7eb;border-radius:10px;background:#f7fbfc}.summary-card strong{display:block;color:#0f7c70;font-size:22pt;line-height:1}.summary-card span{display:block;margin-top:5px;color:#64758a;font-size:8.5pt;font-weight:700}.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.info-card{padding:12px;border-left:3px solid #0f9f8b;background:#f5f9fb}.info-card h3,.print-detail-grid h3{margin:0 0 5px;color:#29435a;font-size:10pt}.info-card p{margin:0;color:#5f7084}.print-step{display:grid;grid-template-columns:38px 1fr;gap:14px;padding:7mm 0;border-top:1px solid #dfe8ed;break-inside:avoid}.print-step-number{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#0f9f8b;color:#fff;font-weight:800}.print-step-kicker{color:#0f7c70;font-size:8pt;font-weight:800;letter-spacing:.1em}.print-step h2{margin:3px 0 4px;color:#102f4a;font-family:Georgia,serif;font-size:17pt}.print-step p{margin:0 0 8px;color:#5f7084}.print-detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:9px}.print-detail-grid section{padding:10px;border:1px solid #dfe8ed;border-radius:8px;background:#fbfdfe}.print-detail-grid ul,.info-card ul{margin:0;padding-left:18px}.print-muted{color:#8795a5!important;font-size:9pt}.footer{margin-top:12mm;padding-top:5mm;border-top:1px solid #dfe8ed;color:#7a8999;font-size:8.5pt}@media print{a{color:inherit;text-decoration:none}.report-nav{display:none}}@media(max-width:650px){.summary-grid,.info-grid,.print-detail-grid{grid-template-columns:1fr}.cover h1{font-size:28pt}}</style></head><body><main class="report"><header class="cover"><div class="brand">Skill2Career AI</div><h1>${esc(targetCareer)}<br>career roadmap</h1><p>A practical, evidence-led plan built from your current profile, readiness result, skill gaps, and next actions.</p><div class="cover-meta"><span class="pill">Prepared ${esc(generatedDate)}</span><span class="pill">${esc(profile.name || 'Learner profile')}</span><span class="pill">${esc(profileSummary)}</span></div></header><nav class="report-nav"><a href="#snapshot">Snapshot</a><a href="#profile">Your profile</a><a href="#phases">Roadmap phases</a><a href="${esc(location.origin)}/#/career-journey">Open live roadmap</a></nav><section class="section" id="snapshot"><h2 class="section-title">Your career snapshot</h2><div class="summary-grid"><div class="summary-card"><strong>${esc(matchScore)}%</strong><span>Career match</span></div><div class="summary-card"><strong>${esc(readiness.overallReadiness ?? 0)}%</strong><span>Overall readiness</span></div><div class="summary-card"><strong>${roadmapSteps.length}</strong><span>Roadmap phases</span></div></div></section><section class="section" id="profile"><h2 class="section-title">Profile foundations</h2><div class="info-grid"><div class="info-card"><h3>Education and interests</h3><p>${esc(profileSummary)}</p><p>${esc(detailItems(profile.interests).join(', ') || 'Interests not recorded')}</p></div><div class="info-card"><h3>Current skills</h3>${printList(profileSkills, 'No selected skills recorded.')}</div><div class="info-card"><h3>Strengths</h3>${printList(readiness.strengths, 'Strengths will appear as more evidence is added.')}</div><div class="info-card"><h3>Target skills</h3>${printList(requiredSkills, 'No required skills recorded.')}</div></div></section><section class="section" id="phases"><h2 class="section-title">Roadmap phases</h2><p>Use each phase to build evidence, practise deliberately, and update your live roadmap as you progress.</p>${stepMarkup || '<p class="print-muted">Your roadmap phases will appear after the assessment is complete.</p>'}</section><section class="section"><h2 class="section-title">Immediate actions</h2>${printList(visibleActions, 'Complete your assessment to unlock recommended actions.')}</section><footer class="footer">This report is generated from your Skill2Career AI session. Open the live roadmap for the latest progress and linked learning resources.</footer></main><script>window.addEventListener('load',()=>setTimeout(()=>window.print(),350));</script></body></html>`);
+  printWindow.document.close();
+  printWindow.focus();
+};
 const renderLanding = (content) => {
   app.innerHTML = `<div class="landing-shell"><header class="landing-nav"><a class="landing-brand" href="#/"><span>Skill2Career</span> AI</a><div class="landing-nav-links"><a href="#how-it-works">How it works</a><a href="#/resume-analysis">Resume Analyzer</a><a href="#/mock-interview">Mock Interview</a></div><a class="landing-start" href="#/assessment">Get started <i class="bi bi-arrow-up-right"></i></a></header>${content}<div class="landing-credit">Career clarity, built for your next step</div></div>`;
+  renderSiteAttribution();
 };
 
 const homePage = async () => {
@@ -192,8 +238,9 @@ const careerJourneyPage = async () => {
         <div class="two-column-layout"><div class="panel"><ol class="action-list">${visibleActions.map((item) => `<li>${esc(item)}</li>`).join('')}</ol></div><div class="panel"><h3>Action Plan</h3><ul class="check-list">${actions.map(([label, complete]) => `<li>${complete ? 'Complete' : 'To do'} · ${esc(label)}</li>`).join('')}${gaps.map((item) => `<li>Recommended · Learn ${esc(item.skillName)}</li>`).join('')}</ul></div></div>
       </section>
       <section class="journey-section" data-journey-group="roadmap" role="tabpanel" tabindex="0" hidden>
-        <h2>Your Career Roadmap</h2>
-        <div class="timeline-list">${roadmapSteps.map((step) => `<div class="timeline-item ${esc(step.status || 'not_started')}"><div class="timeline-number">${esc(step.stepNumber)}</div><div class="timeline-body"><h3>${esc(step.title)}</h3><p>${esc(step.description)}</p><span class="tag">${esc(step.status || 'not_started')}</span></div></div>`).join('')}</div>
+        <div class="roadmap-heading-row"><div><h2>Your Career Roadmap</h2><p class="roadmap-intro">A focused sequence of phases to turn your skill gaps into visible career evidence.</p></div><button type="button" class="primary-btn roadmap-download" data-download-roadmap><i class="bi bi-file-earmark-arrow-down" aria-hidden="true"></i> Download roadmap PDF</button></div>
+        <div class="roadmap-summary"><div><strong>${roadmapSteps.length}</strong><span>Phases to follow</span></div><div><strong>${gaps.length}</strong><span>Priority skills</span></div><div><strong>${readiness.overallReadiness}%</strong><span>Current readiness</span></div></div>
+        <div class="timeline-list roadmap-list">${roadmapSteps.map((step, index) => `<article class="timeline-item roadmap-step-card"><div class="timeline-number">${index + 1}</div><div class="timeline-body"><div class="roadmap-step-meta"><span>PHASE ${index + 1}</span><span>${esc(step.skill || 'Career development')}</span></div><h3>${esc(step.title)}</h3><p>${esc(step.description)}</p><div class="roadmap-detail-grid"><div><h4><i class="bi bi-check2-circle" aria-hidden="true"></i> What to do</h4>${detailItems(step.tasks).length ? `<ul>${detailItems(step.tasks).map((task) => `<li>${esc(task)}</li>`).join('')}</ul>` : '<p>Add a practical task and document the result.</p>'}</div><div><h4><i class="bi bi-folder2-open" aria-hidden="true"></i> Evidence to build</h4>${detailItems(step.projects).length ? `<ul>${detailItems(step.projects).map((project) => `<li>${esc(typeof project === 'string' ? project : project.title || project.name || project.description || '')}</li>`).join('')}</ul>` : '<p>Create a work sample that demonstrates this skill.</p>'}</div></div></div></article>`).join('')}</div>
       </section>
     </section>`);
 
@@ -208,6 +255,7 @@ const careerJourneyPage = async () => {
       panels.forEach((panel) => { panel.hidden = panel.dataset.journeyGroup !== tabId; });
     };
     tabs.forEach((tab) => tab.addEventListener('click', () => activateTab(tab.dataset.journeyTab)));
+    document.querySelector('[data-download-roadmap]')?.addEventListener('click', () => openRoadmapPrintView({ profile, readiness, roadmap: roadmapResult.roadmap, roadmapSteps, visibleActions }));
     document.querySelector('a[href="#career-action-plan"]')?.addEventListener('click', (event) => {
       event.preventDefault();
       activateTab('actions');
