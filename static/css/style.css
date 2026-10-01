@@ -1,1 +1,159 @@
-:root{--ink:#17233f;--blue:#5565f5;--violet:#8458e8;--muted:#64748b}body{color:var(--ink);background:#f8faff;font-family:Inter,system-ui,-apple-system,sans-serif}.navbar-brand span{color:#8b5cf6}.hero{background:radial-gradient(circle at 80% 20%,#e5e4ff,transparent 34%),linear-gradient(135deg,#f8faff,#f4f1ff);min-height:560px;display:grid;align-items:center}.hero h1{font-size:clamp(2.7rem,6vw,5rem);font-weight:800;letter-spacing:-.06em}.hero h1 span{color:var(--blue)}.eyebrow{font-size:.75rem;letter-spacing:.16em;color:var(--violet);font-weight:800}.glass-card,.feature,.card{border:0;border-radius:20px;box-shadow:0 14px 40px rgba(42,54,100,.09)}.glass-card{background:#fff;padding:2rem}.glass-card b{float:right;color:var(--blue)}.progress{height:10px;border-radius:8px}.progress-bar{background:linear-gradient(90deg,var(--blue),var(--violet))}.feature{background:#fff;padding:2rem;height:100%}.feature i{font-size:1.8rem;color:var(--blue)}.btn-primary{border:0;background:linear-gradient(90deg,var(--blue),var(--violet));border-radius:10px;padding:.65rem 1.1rem}.auth-wrap{min-height:70vh;display:grid;place-items:center}.form-card{width:min(430px,92vw);padding:2rem;display:grid;gap:1rem}.onboard{max-width:850px}.metric{padding:1.5rem}.metric small{color:var(--muted);font-weight:700}.metric h3{margin-top:.5rem}.career-card{padding:1.5rem;height:100%;display:flex;flex-direction:column}.career-card .btn{margin-top:auto}.timeline{max-width:800px}.timeline .step{border-left:3px solid var(--blue);padding:1.3rem 1.5rem;margin:1rem 0;background:#fff;border-radius:0 15px 15px 0;box-shadow:0 8px 20px #e8ecf6}.messages{min-height:220px;padding:1rem 0}.message{padding:.8rem 1rem;border-radius:12px;margin:.5rem 0;background:#f0f2ff}.message.user{background:#e9fbf1}.chat{max-width:850px;margin:auto;padding:2rem}.empty{padding:2rem;color:var(--muted);text-align:center}@media(max-width:576px){.hero{min-height:auto}.hero h1{font-size:2.8rem}.onboard .d-flex{font-size:.6rem;gap:.25rem}.navbar .btn{margin-top:.5rem}}
+:root {
+  --ink: #17233f;
+  --blue: #5565f5;
+  --violet: #8458e8;
+  --muted: #64748b;
+}
+body {
+  color: var(--ink);
+  background: #f8faff;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+.navbar-brand span {
+  color: #8b5cf6;
+}
+.hero {
+  background:
+    radial-gradient(circle at 80% 20%, #e5e4ff, transparent 34%),
+    linear-gradient(135deg, #f8faff, #f4f1ff);
+  min-height: 560px;
+  display: grid;
+  align-items: center;
+}
+.hero h1 {
+  font-size: clamp(2.7rem, 6vw, 5rem);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+}
+.hero h1 span {
+  color: var(--blue);
+}
+.eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  color: var(--violet);
+  font-weight: 800;
+}
+.glass-card,
+.feature,
+.card {
+  border: 0;
+  border-radius: 20px;
+  box-shadow: 0 14px 40px rgba(42, 54, 100, 0.09);
+}
+.glass-card {
+  background: #fff;
+  padding: 2rem;
+}
+.glass-card b {
+  float: right;
+  color: var(--blue);
+}
+.progress {
+  height: 10px;
+  border-radius: 8px;
+}
+.progress-bar {
+  background: linear-gradient(90deg, var(--blue), var(--violet));
+}
+.feature {
+  background: #fff;
+  padding: 2rem;
+  height: 100%;
+}
+.feature i {
+  font-size: 1.8rem;
+  color: var(--blue);
+}
+.btn-primary {
+  border: 0;
+  background: linear-gradient(90deg, var(--blue), var(--violet));
+  border-radius: 10px;
+  padding: 0.65rem 1.1rem;
+}
+.auth-wrap {
+  min-height: 70vh;
+  display: grid;
+  place-items: center;
+}
+.form-card {
+  width: min(430px, 92vw);
+  padding: 2rem;
+  display: grid;
+  gap: 1rem;
+}
+.onboard {
+  max-width: 850px;
+}
+.metric {
+  padding: 1.5rem;
+}
+.metric small {
+  color: var(--muted);
+  font-weight: 700;
+}
+.metric h3 {
+  margin-top: 0.5rem;
+}
+.career-card {
+  padding: 1.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.career-card .btn {
+  margin-top: auto;
+}
+.timeline {
+  max-width: 800px;
+}
+.timeline .step {
+  border-left: 3px solid var(--blue);
+  padding: 1.3rem 1.5rem;
+  margin: 1rem 0;
+  background: #fff;
+  border-radius: 0 15px 15px 0;
+  box-shadow: 0 8px 20px #e8ecf6;
+}
+.messages {
+  min-height: 220px;
+  padding: 1rem 0;
+}
+.message {
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  margin: 0.5rem 0;
+  background: #f0f2ff;
+}
+.message.user {
+  background: #e9fbf1;
+}
+.chat {
+  max-width: 850px;
+  margin: auto;
+  padding: 2rem;
+}
+.empty {
+  padding: 2rem;
+  color: var(--muted);
+  text-align: center;
+}
+@media (max-width: 576px) {
+  .hero {
+    min-height: auto;
+  }
+  .hero h1 {
+    font-size: 2.8rem;
+  }
+  .onboard .d-flex {
+    font-size: 0.6rem;
+    gap: 0.25rem;
+  }
+  .navbar .btn {
+    margin-top: 0.5rem;
+  }
+}

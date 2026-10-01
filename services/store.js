@@ -1,40 +1,315 @@
-import crypto from 'crypto';
+import crypto from "crypto";
 
-const skills=['Excel','SQL','Python','JavaScript','HTML','CSS','React','Java','C++','Git','Linux','Power BI','Tableau','Cloud Computing','Networking','Cybersecurity','Data Visualization','Machine Learning','Data Structures','Algorithms','APIs','Docker','AWS','Azure','Node.js','Statistics','Problem Solving','Critical Thinking','Research','Data Cleaning','Accounting','Financial Analysis','Business Analysis','Marketing','SEO','Digital Advertising','Requirements Gathering','Project Management','Communication','Teamwork','Presentation','Time Management','Figma','UX Research','Wireframing','Prototyping','Visual Design'];
-const careerDefinitions={"Data Analyst":'Excel,SQL,Python,Statistics,Power BI,Data Visualization',"Web Developer":'HTML,CSS,JavaScript,React,Git,APIs',"Software Developer":'Python,Java,Data Structures,Algorithms,Git,Problem Solving',"UI/UX Designer":'Figma,UX Research,Wireframing,Prototyping,Visual Design,Communication',"Digital Marketer":'Marketing,SEO,Digital Advertising,Data Visualization,Communication',"Cybersecurity Analyst":'Cybersecurity,Networking,Linux,Python,Problem Solving',"Accountant":'Accounting,Excel,Financial Analysis,Communication,Critical Thinking',"Business Analyst":'Business Analysis,Requirements Gathering,SQL,Excel,Communication',"Data Scientist":'Python,SQL,Statistics,Machine Learning,Data Cleaning,Data Visualization',"Cloud Engineer":'Cloud Computing,AWS,Azure,Docker,Linux,Networking,Git',"Mobile App Developer":'JavaScript,React,APIs,Git,Problem Solving',"DevOps Engineer":'Linux,Docker,AWS,Git,Cloud Computing',"Machine Learning Engineer":'Python,Statistics,Machine Learning,Data Structures,Algorithms',"Product Manager":'Research,Communication,Presentation,Project Management,Requirements Gathering',"Project Manager":'Project Management,Communication,Teamwork,Time Management,Presentation',"Graphic Designer":'Figma,Visual Design,Research,Communication',"Content Strategist":'Research,Communication,Marketing,Presentation',"Market Research Analyst":'Research,Statistics,Data Visualization,Communication',"Financial Analyst":'Excel,Financial Analysis,Statistics,Data Visualization',"Human Resources Specialist":'Communication,Research,Teamwork,Presentation',"Teacher":'Communication,Presentation,Research,Time Management',"Technical Writer":'Research,Communication,APIs,Presentation',"Game Developer":'C++,Python,Data Structures,Algorithms,Problem Solving',"Database Administrator":'SQL,Python,Cloud Computing,Linux',"Network Engineer":'Networking,Linux,Cloud Computing,Cybersecurity'};
-const professionalSkills=['Auditing','Taxation','GST','Income Tax','Bookkeeping','Tally','Accounting Standards','Cost Accounting','Financial Reporting','Corporate Finance','Investment Analysis','Risk Management','Compliance','Legal Research','Contract Drafting','Constitutional Law','Civil Law','Criminal Law','Corporate Law','Intellectual Property','Litigation','Negotiation','Mediation','Case Analysis','Patient Care','Clinical Research','Medical Terminology','Public Health','Pharmacology','First Aid','Lesson Planning','Curriculum Development','Classroom Management','Educational Psychology','Instructional Design','Recruitment','Talent Management','Payroll','Employee Relations','Performance Management','Labour Law','Operations Management','Supply Chain','Procurement','Inventory Management','Quality Assurance','Business Strategy','Entrepreneurship','Customer Service','Sales','Market Research','Brand Management','Public Relations','Content Writing','Copywriting','Social Media','Photography','Video Production','Event Management','Hospitality Management','Tourism Management','Architecture','AutoCAD','Engineering Design','Project Planning','Environmental Science','Sustainability','Agriculture','Public Policy','Community Development','Government Relations','Foreign Languages','Emotional Intelligence','Leadership','Creativity','Decision Making','Electrical Circuits','Power Systems','Control Systems','Electronics','Microcontrollers','Embedded Systems','Mechanical Design','Thermodynamics','Fluid Mechanics','Manufacturing','CAD','Mining Engineering','Geology','Mine Safety','Mineral Processing','Surveying','Chemical Engineering','Process Engineering','Materials Science','Robotics','Instrumentation','Renewable Energy'];
-const additionalCareerDefinitions={"Chartered Accountant":'Accounting,Auditing,Taxation,GST,Financial Reporting,Compliance',"Tax Consultant":'Taxation,GST,Income Tax,Accounting,Compliance,Communication',"Lawyer":'Legal Research,Contract Drafting,Negotiation,Case Analysis,Communication',"Doctor":'Patient Care,Medical Terminology,Clinical Research,First Aid,Communication',"Nurse":'Patient Care,Medical Terminology,First Aid,Communication,Teamwork',"School Teacher":'Lesson Planning,Curriculum Development,Classroom Management,Educational Psychology,Communication',"HR Manager":'Recruitment,Talent Management,Employee Relations,Performance Management,Leadership',"Operations Manager":'Operations Management,Supply Chain,Quality Assurance,Leadership,Problem Solving',"Entrepreneur":'Entrepreneurship,Business Strategy,Marketing,Financial Analysis,Leadership',"Journalist":'Research,Content Writing,Foreign Languages,Interviewing,Communication',"Architect":'Architecture,AutoCAD,Engineering Design,Project Planning,Creativity',"Electrical Engineer":'Electrical Circuits,Power Systems,Control Systems,Instrumentation,Renewable Energy',"Electronics Engineer":'Electronics,Microcontrollers,Embedded Systems,Control Systems,Instrumentation',"Mechanical Engineer":'Mechanical Design,Thermodynamics,Fluid Mechanics,Manufacturing,CAD',"Mining Engineer":'Mining Engineering,Geology,Mine Safety,Mineral Processing,Surveying',"Civil Engineer":'Engineering Design,Project Planning,AutoCAD,Surveying,Quality Assurance',"Chemical Engineer":'Chemical Engineering,Process Engineering,Materials Science,Quality Assurance,Research',"Robotics Engineer":'Robotics,Electronics,Programming,Control Systems,Mechanical Design',"Environmental Engineer":'Environmental Science,Sustainability,Chemical Engineering,Research,Project Planning'};
-const slug=value=>value.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-const id=()=>crypto.randomUUID();
-const careers=Object.entries({...careerDefinitions,...additionalCareerDefinitions}).map(([name,list])=>({
-  _id:id(),name,slug:slug(name),description:`A practical career path focused on ${name} skills.`,industry:additionalCareerDefinitions[name]?'Professional':'Technology',educationPreferences:[],interests:['Technology','Data'],
-  skills:list.split(',').map((skillName,index)=>({skillId:slug(skillName),skillName,requiredLevel:index<3?'Intermediate':'Beginner',importance:index<3?'High':'Medium',weight:index<3?1:.7})),roles:[name,`Junior ${name}`]
+const skills = [
+  "Excel",
+  "SQL",
+  "Python",
+  "JavaScript",
+  "HTML",
+  "CSS",
+  "React",
+  "Java",
+  "C++",
+  "Git",
+  "Linux",
+  "Power BI",
+  "Tableau",
+  "Cloud Computing",
+  "Networking",
+  "Cybersecurity",
+  "Data Visualization",
+  "Machine Learning",
+  "Data Structures",
+  "Algorithms",
+  "APIs",
+  "Docker",
+  "AWS",
+  "Azure",
+  "Node.js",
+  "Statistics",
+  "Problem Solving",
+  "Critical Thinking",
+  "Research",
+  "Data Cleaning",
+  "Accounting",
+  "Financial Analysis",
+  "Business Analysis",
+  "Marketing",
+  "SEO",
+  "Digital Advertising",
+  "Requirements Gathering",
+  "Project Management",
+  "Communication",
+  "Teamwork",
+  "Presentation",
+  "Time Management",
+  "Figma",
+  "UX Research",
+  "Wireframing",
+  "Prototyping",
+  "Visual Design",
+];
+const careerDefinitions = {
+  "Data Analyst": "Excel,SQL,Python,Statistics,Power BI,Data Visualization",
+  "Web Developer": "HTML,CSS,JavaScript,React,Git,APIs",
+  "Software Developer":
+    "Python,Java,Data Structures,Algorithms,Git,Problem Solving",
+  "UI/UX Designer":
+    "Figma,UX Research,Wireframing,Prototyping,Visual Design,Communication",
+  "Digital Marketer":
+    "Marketing,SEO,Digital Advertising,Data Visualization,Communication",
+  "Cybersecurity Analyst":
+    "Cybersecurity,Networking,Linux,Python,Problem Solving",
+  Accountant:
+    "Accounting,Excel,Financial Analysis,Communication,Critical Thinking",
+  "Business Analyst":
+    "Business Analysis,Requirements Gathering,SQL,Excel,Communication",
+  "Data Scientist":
+    "Python,SQL,Statistics,Machine Learning,Data Cleaning,Data Visualization",
+  "Cloud Engineer": "Cloud Computing,AWS,Azure,Docker,Linux,Networking,Git",
+  "Mobile App Developer": "JavaScript,React,APIs,Git,Problem Solving",
+  "DevOps Engineer": "Linux,Docker,AWS,Git,Cloud Computing",
+  "Machine Learning Engineer":
+    "Python,Statistics,Machine Learning,Data Structures,Algorithms",
+  "Product Manager":
+    "Research,Communication,Presentation,Project Management,Requirements Gathering",
+  "Project Manager":
+    "Project Management,Communication,Teamwork,Time Management,Presentation",
+  "Graphic Designer": "Figma,Visual Design,Research,Communication",
+  "Content Strategist": "Research,Communication,Marketing,Presentation",
+  "Market Research Analyst":
+    "Research,Statistics,Data Visualization,Communication",
+  "Financial Analyst": "Excel,Financial Analysis,Statistics,Data Visualization",
+  "Human Resources Specialist": "Communication,Research,Teamwork,Presentation",
+  Teacher: "Communication,Presentation,Research,Time Management",
+  "Technical Writer": "Research,Communication,APIs,Presentation",
+  "Game Developer": "C++,Python,Data Structures,Algorithms,Problem Solving",
+  "Database Administrator": "SQL,Python,Cloud Computing,Linux",
+  "Network Engineer": "Networking,Linux,Cloud Computing,Cybersecurity",
+};
+const professionalSkills = [
+  "Auditing",
+  "Taxation",
+  "GST",
+  "Income Tax",
+  "Bookkeeping",
+  "Tally",
+  "Accounting Standards",
+  "Cost Accounting",
+  "Financial Reporting",
+  "Corporate Finance",
+  "Investment Analysis",
+  "Risk Management",
+  "Compliance",
+  "Legal Research",
+  "Contract Drafting",
+  "Constitutional Law",
+  "Civil Law",
+  "Criminal Law",
+  "Corporate Law",
+  "Intellectual Property",
+  "Litigation",
+  "Negotiation",
+  "Mediation",
+  "Case Analysis",
+  "Patient Care",
+  "Clinical Research",
+  "Medical Terminology",
+  "Public Health",
+  "Pharmacology",
+  "First Aid",
+  "Lesson Planning",
+  "Curriculum Development",
+  "Classroom Management",
+  "Educational Psychology",
+  "Instructional Design",
+  "Recruitment",
+  "Talent Management",
+  "Payroll",
+  "Employee Relations",
+  "Performance Management",
+  "Labour Law",
+  "Operations Management",
+  "Supply Chain",
+  "Procurement",
+  "Inventory Management",
+  "Quality Assurance",
+  "Business Strategy",
+  "Entrepreneurship",
+  "Customer Service",
+  "Sales",
+  "Market Research",
+  "Brand Management",
+  "Public Relations",
+  "Content Writing",
+  "Copywriting",
+  "Social Media",
+  "Photography",
+  "Video Production",
+  "Event Management",
+  "Hospitality Management",
+  "Tourism Management",
+  "Architecture",
+  "AutoCAD",
+  "Engineering Design",
+  "Project Planning",
+  "Environmental Science",
+  "Sustainability",
+  "Agriculture",
+  "Public Policy",
+  "Community Development",
+  "Government Relations",
+  "Foreign Languages",
+  "Emotional Intelligence",
+  "Leadership",
+  "Creativity",
+  "Decision Making",
+  "Electrical Circuits",
+  "Power Systems",
+  "Control Systems",
+  "Electronics",
+  "Microcontrollers",
+  "Embedded Systems",
+  "Mechanical Design",
+  "Thermodynamics",
+  "Fluid Mechanics",
+  "Manufacturing",
+  "CAD",
+  "Mining Engineering",
+  "Geology",
+  "Mine Safety",
+  "Mineral Processing",
+  "Surveying",
+  "Chemical Engineering",
+  "Process Engineering",
+  "Materials Science",
+  "Robotics",
+  "Instrumentation",
+  "Renewable Energy",
+];
+const additionalCareerDefinitions = {
+  "Chartered Accountant":
+    "Accounting,Auditing,Taxation,GST,Financial Reporting,Compliance",
+  "Tax Consultant":
+    "Taxation,GST,Income Tax,Accounting,Compliance,Communication",
+  Lawyer:
+    "Legal Research,Contract Drafting,Negotiation,Case Analysis,Communication",
+  Doctor:
+    "Patient Care,Medical Terminology,Clinical Research,First Aid,Communication",
+  Nurse: "Patient Care,Medical Terminology,First Aid,Communication,Teamwork",
+  "School Teacher":
+    "Lesson Planning,Curriculum Development,Classroom Management,Educational Psychology,Communication",
+  "HR Manager":
+    "Recruitment,Talent Management,Employee Relations,Performance Management,Leadership",
+  "Operations Manager":
+    "Operations Management,Supply Chain,Quality Assurance,Leadership,Problem Solving",
+  Entrepreneur:
+    "Entrepreneurship,Business Strategy,Marketing,Financial Analysis,Leadership",
+  Journalist:
+    "Research,Content Writing,Foreign Languages,Interviewing,Communication",
+  Architect:
+    "Architecture,AutoCAD,Engineering Design,Project Planning,Creativity",
+  "Electrical Engineer":
+    "Electrical Circuits,Power Systems,Control Systems,Instrumentation,Renewable Energy",
+  "Electronics Engineer":
+    "Electronics,Microcontrollers,Embedded Systems,Control Systems,Instrumentation",
+  "Mechanical Engineer":
+    "Mechanical Design,Thermodynamics,Fluid Mechanics,Manufacturing,CAD",
+  "Mining Engineer":
+    "Mining Engineering,Geology,Mine Safety,Mineral Processing,Surveying",
+  "Civil Engineer":
+    "Engineering Design,Project Planning,AutoCAD,Surveying,Quality Assurance",
+  "Chemical Engineer":
+    "Chemical Engineering,Process Engineering,Materials Science,Quality Assurance,Research",
+  "Robotics Engineer":
+    "Robotics,Electronics,Programming,Control Systems,Mechanical Design",
+  "Environmental Engineer":
+    "Environmental Science,Sustainability,Chemical Engineering,Research,Project Planning",
+};
+const slug = (value) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+const id = () => crypto.randomUUID();
+const careers = Object.entries({
+  ...careerDefinitions,
+  ...additionalCareerDefinitions,
+}).map(([name, list]) => ({
+  _id: id(),
+  name,
+  slug: slug(name),
+  description: `A practical career path focused on ${name} skills.`,
+  industry: additionalCareerDefinitions[name] ? "Professional" : "Technology",
+  educationPreferences: [],
+  interests: ["Technology", "Data"],
+  skills: list.split(",").map((skillName, index) => ({
+    skillId: slug(skillName),
+    skillName,
+    requiredLevel: index < 3 ? "Intermediate" : "Beginner",
+    importance: index < 3 ? "High" : "Medium",
+    weight: index < 3 ? 1 : 0.7,
+  })),
+  roles: [name, `Junior ${name}`],
 }));
-const students=new Map();
-const roadmaps=new Map();
-const conversations=[];
-const interviewSessions=new Map();
-const projectAnalyses=new Map();
-const resumeAnalyses=new Map();
-const learningCaches=new Map();
+const students = new Map();
+const roadmaps = new Map();
+const conversations = [];
+const interviewSessions = new Map();
+const projectAnalyses = new Map();
+const resumeAnalyses = new Map();
+const learningCaches = new Map();
 
-export const catalog={skills:[...skills,...professionalSkills].map(name=>({_id:slug(name),name,category:'Professional',description:`Useful career skill: ${name}.`,aliases:[]})),careers};
-export const store={
-  findStudentByEmail:email=>[...students.values()].find(student=>student.email===email),
-  findStudent:id=>students.get(id),
-  saveStudent:student=>{students.set(student._id,student);return student;},
-  findRoadmap:studentId=>[...roadmaps.values()].filter(item=>item.studentId===studentId).sort((a,b)=>b.createdAt-a.createdAt)[0],
-  saveRoadmap:roadmap=>{roadmaps.set(roadmap._id,roadmap);return roadmap;},
-  findCareer:idOrSlug=>careers.find(career=>career._id===idOrSlug||career.slug===idOrSlug),
-  saveConversation:conversation=>conversations.push(conversation),
-  newId:id,
+export const catalog = {
+  skills: [...skills, ...professionalSkills].map((name) => ({
+    _id: slug(name),
+    name,
+    category: "Professional",
+    description: `Useful career skill: ${name}.`,
+    aliases: [],
+  })),
+  careers,
+};
+export const store = {
+  findStudentByEmail: (email) =>
+    [...students.values()].find((student) => student.email === email),
+  findStudent: (id) => students.get(id),
+  saveStudent: (student) => {
+    students.set(student._id, student);
+    return student;
+  },
+  findRoadmap: (studentId) =>
+    [...roadmaps.values()]
+      .filter((item) => item.studentId === studentId)
+      .sort((a, b) => b.createdAt - a.createdAt)[0],
+  saveRoadmap: (roadmap) => {
+    roadmaps.set(roadmap._id, roadmap);
+    return roadmap;
+  },
+  findCareer: (idOrSlug) =>
+    careers.find(
+      (career) => career._id === idOrSlug || career.slug === idOrSlug,
+    ),
+  saveConversation: (conversation) => conversations.push(conversation),
+  newId: id,
   interviewSessions,
   projectAnalyses,
   resumeAnalyses,
-  learningCaches
+  learningCaches,
 };
 
-export function createStudent(data){return store.saveStudent({_id:id(),...data});}
+export function createStudent(data) {
+  return store.saveStudent({ _id: id(), ...data });
+}
 
-const guest=createStudent({name:'Guest User',email:'guest@skill2career.ai',education:{},interests:[],skills:[],profileCompleted:false,createdAt:new Date(),updatedAt:new Date()});
-store.guest=guest;
+const guest = createStudent({
+  name: "Guest User",
+  email: "guest@skill2career.ai",
+  education: {},
+  interests: [],
+  skills: [],
+  profileCompleted: false,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+});
+store.guest = guest;
