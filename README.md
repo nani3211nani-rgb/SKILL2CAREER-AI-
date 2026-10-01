@@ -1,4 +1,4 @@
-# Skill2Career AI — AI-Powered Career Readiness & Skill-Gap Platform
+# Skill2Career AI — Career Readiness & Skill-Gap Platform
 
 ## Problem
 
@@ -6,41 +6,44 @@ Students often receive generic career recommendations but do not know exactly wh
 
 ## Solution
 
-Skill2Career AI combines a deterministic skill-gap engine with AI-assisted assessment, resume analysis, project analysis, mock interviews, learning recommendations, and a dynamic roadmap. The focus is not just discovery of a career but readiness for it.
+Skill2Career AI combines a deterministic skill-gap engine with AI-assisted guidance, resume analysis, mock interviews, learning recommendations, and a dynamic roadmap. The focus is not just discovering a career, but becoming ready for it.
 
 ## Features
 
-- AI Career Assessment
+- Career Assessment and best-fit matching
 - Deterministic Career Matching
 - Skill Gap Analysis
 - Career Readiness Score
 - Resume Analyzer
 - Project Analyzer
-- AI Mock Interview
+- Role-specific Mock Interview
 - Personalized Action Plan
-- Dynamic Roadmap
+- Detailed Career Roadmap
+- Roadmap download as a structured, printable PDF report
 - AI YouTube Learning Recommendations
-- Skill Quiz support via the learning loop
-- Skill Reassessment support in session data
 - Career Journey flow
-- Exhibition-friendly dashboard concepts
+- Responsive homepage with interactive feature chips
+- Per-browser temporary profile sessions
 
 ## Privacy
 
 - No database is used.
-- All student profile data is kept in memory for the current session.
+- Each browser receives an isolated temporary session using an HttpOnly cookie.
+- Student profile, roadmap, interview, and analysis data is kept in memory only.
 - Resume files are not permanently stored.
 - Interview conversations are not permanently stored.
-- Restarting the server resets guest data.
+- Sessions expire after 24 hours and restarting the server resets temporary data.
+- The homepage and Resume Analyzer explain the temporary-data model in plain language.
 
 ## Tech Stack
 
 - Node.js
 - Express
-- Bootstrap-powered UI in the static/public layer
-- In-memory guest profile storage
+- Bootstrap and custom responsive UI in the static/public layer
+- In-memory session storage with cookie-based visitor isolation
 - AI provider fallback: Gemini, Groq, Mistral
 - Optional YouTube Data API for learning video discovery
+- Render Blueprint deployment via `render.yaml`
 
 ## Environment Variables
 
@@ -55,7 +58,19 @@ MISTRAL_MODEL=mistral-small-latest
 YOUTUBE_API_KEY=your_key
 ```
 
-YouTube is optional. If it is not configured, the app continues to work and shows a clear fallback message instead of inventing links.
+All AI providers are optional. If an AI provider or YouTube is not configured, the app continues to work with deterministic analysis and clear fallback messages instead of inventing results or links.
+
+## Website Views
+
+The browser app is served from `/` and uses hash navigation:
+
+- `#/` — Homepage and career overview
+- `#/assessment` — Education, interests, career target, and skill proficiency form
+- `#/career-journey` — Match, readiness, skill gaps, action plan, and roadmap
+- `#/resume-analysis` — PDF, DOCX, or TXT resume analysis
+- `#/mock-interview` — Role-specific interview preview and practice
+
+The homepage includes interactive feature chips for career matching, skill gaps, learning videos, resume insights, and mock interviews. The site-wide footer includes the project development credit for Poorna Chander, Srinidhi, and Shiwani from B.Com (CA) 3rd Year at VJIAS.
 
 ## API Overview
 
@@ -78,6 +93,8 @@ YouTube is optional. If it is not configured, the app continues to work and show
 - `GET /api/ai/roadmap`
 - `POST /api/ai/chat`
 
+Protected API requests are automatically associated with the current browser session.
+
 ## Architecture
 
 `Assess -> find skill gap -> learn -> practice -> build -> interview -> reassess -> job-ready`
@@ -88,6 +105,12 @@ The deterministic skill-gap calculator remains the source of truth for career re
 
 ```bash
 npm install
+npm start
+```
+
+Open `http://localhost:3000` in a browser. For development with automatic restarts:
+
+```bash
 npm run dev
 ```
 
@@ -97,4 +120,15 @@ Run tests with:
 npm test
 ```
 
-The app is designed to remain session-based and privacy-first. It does not require a database, and restarting the server resets all temporary profile and interview state.
+## Render Deployment
+
+The repository includes [render.yaml](render.yaml) with the production configuration:
+
+- Build command: `npm install`
+- Start command: `npm start`
+- Health check: `/api/health`
+- Automatic deploys from the `main` branch
+
+Create a Render Blueprint from the repository, then add any optional AI and YouTube API keys as private Render environment variables. Never commit API keys to the repository.
+
+The app remains session-based and privacy-first. It does not require a database, and restarting the server resets all temporary profile and interview state.
