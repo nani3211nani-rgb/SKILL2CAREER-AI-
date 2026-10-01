@@ -1,0 +1,208 @@
+@page {
+  size: A4;
+  margin: 10mm 12mm 12mm;
+}
+
+:root {
+  --navy: #112d46;
+  --blue: #1769e0;
+  --teal: #0e9f8a;
+  --ink: #25384d;
+  --muted: #66788c;
+  --line: #dce7ed;
+  --soft: #f4f9fb;
+  --mint: #eaf8f4;
+  --sky: #edf5ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: #dfe9ee;
+}
+
+body {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0;
+  color: var(--ink);
+  background: #fff;
+  font-family: "Avenir Next", Avenir, Helvetica, Arial, sans-serif;
+  font-size: 9.2pt;
+  line-height: 1.38;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body::before {
+  content: "SKILL2CAREER AI  /  PROJECT DOCUMENTATION";
+  display: block;
+  padding: 3mm 0 2mm;
+  border-bottom: 1px solid var(--line);
+  color: var(--teal);
+  font-size: 6.5pt;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+h1 {
+  min-height: 76mm;
+  margin: 0;
+  padding: 22mm 12mm 9mm;
+  color: #fff;
+  background: linear-gradient(135deg, var(--navy), #155a73 58%, var(--teal));
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 33pt;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  page-break-after: avoid;
+}
+
+h1::after {
+  content: "\A Practical career direction for students";
+  display: block;
+  margin-top: 8mm;
+  color: #c9f1e7;
+  font-family: "Avenir Next", Avenir, Helvetica, Arial, sans-serif;
+  font-size: 11pt;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0;
+  white-space: pre;
+}
+
+h2 {
+  margin: 7mm 0 3mm;
+  padding-bottom: 1.5mm;
+  border-bottom: 2px solid var(--teal);
+  color: var(--navy);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16pt;
+  line-height: 1.1;
+  page-break-after: avoid;
+}
+
+h3 {
+  margin: 4mm 0 1.5mm;
+  color: var(--blue);
+  font-size: 10.5pt;
+  page-break-after: avoid;
+}
+
+p {
+  margin: 0 0 2.5mm;
+}
+
+strong {
+  color: var(--navy);
+}
+
+blockquote {
+  margin: 4mm 0;
+  padding: 3mm 5mm;
+  border: 0;
+  border-left: 4px solid var(--teal);
+  border-radius: 0 9px 9px 0;
+  background: var(--mint);
+  color: #17685f;
+  font-size: 10.5pt;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+code {
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: var(--sky);
+  color: #1459b2;
+  font-family: Menlo, Monaco, monospace;
+  font-size: 0.9em;
+}
+
+pre {
+  margin: 3mm 0;
+  padding: 3mm;
+  border-radius: 9px;
+  background: var(--navy);
+  color: #d8f5ef;
+  font-size: 8pt;
+}
+
+hr {
+  margin: 4mm 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+ul {
+  margin: 1mm 0 3mm;
+  padding-left: 6mm;
+}
+
+li {
+  margin-bottom: 0.8mm;
+}
+
+ul li::marker {
+  color: var(--teal);
+}
+
+table {
+  width: 100%;
+  margin: 3mm 0 5mm;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  page-break-inside: avoid;
+}
+
+th {
+  padding: 2mm;
+  color: #fff;
+  background: var(--navy);
+  text-align: left;
+  font-size: 8pt;
+  letter-spacing: 0.03em;
+}
+
+td {
+  padding: 2mm;
+  border-top: 1px solid var(--line);
+  vertical-align: top;
+}
+
+tbody tr:nth-child(even) td {
+  background: var(--soft);
+}
+
+h2:first-of-type {
+  margin-top: 6mm;
+}
+
+h2 + p,
+h2 + table,
+h2 + ul {
+  page-break-before: avoid;
+}
+
+a {
+  color: var(--blue);
+}
+
+@media screen {
+  body {
+    margin: 24px auto;
+    padding: 0 28px 42px;
+    box-shadow: 0 10px 45px rgba(17, 45, 70, 0.15);
+  }
+}
+
+@media print {
+  body::before {
+    position: running(pageHeader);
+  }
+}

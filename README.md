@@ -120,6 +120,12 @@ Run tests with:
 npm test
 ```
 
+## Presentation Documents
+
+- [Project documentation](PROJECT_DOCUMENTATION.md)
+- [Four-page presentation PDF](PROJECT_DOCUMENTATION.pdf)
+- [PDF print stylesheet](documentation-print.css)
+
 ## Render Deployment
 
 The repository includes [render.yaml](render.yaml) with the production configuration:
