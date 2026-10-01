@@ -1057,6 +1057,33 @@ input:focus, select:focus, textarea:focus { border-color: #5c9ce8; box-shadow: 0
   font-size: .7rem;
   font-weight: 800;
 }
+.landing-feature-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+.landing-feature-pills span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 10px;
+  border: 1px solid #d7e6eb;
+  border-radius: 999px;
+  background: rgba(255,255,255,.78);
+  color: #53677c;
+  font-size: .72rem;
+  font-weight: 800;
+  transition: transform .18s ease, border-color .18s ease, background .18s ease, color .18s ease, box-shadow .18s ease;
+}
+.landing-feature-pills span i { color: #0e9f8a; font-size: .84rem; }
+.landing-feature-pills span:hover, .landing-feature-pills span:focus-within {
+  transform: translateY(-3px);
+  border-color: #9dd8cc;
+  background: #edf9f6;
+  color: #087c6d;
+  box-shadow: 0 8px 16px rgba(14,159,138,.12);
+}
 .landing-story { background: linear-gradient(180deg, #f5f8fb, #edf6f7); }
 .landing-path article { border-color: #dce7eb; box-shadow: 0 12px 25px rgba(30, 77, 102, .05); }
 .landing-path article > i { background: #e4f5f1; color: #087c6d; }
