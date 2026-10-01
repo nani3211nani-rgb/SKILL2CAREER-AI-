@@ -13,6 +13,10 @@ const careers=Object.entries({...careerDefinitions,...additionalCareerDefinition
 const students=new Map();
 const roadmaps=new Map();
 const conversations=[];
+const interviewSessions=new Map();
+const projectAnalyses=new Map();
+const resumeAnalyses=new Map();
+const learningCaches=new Map();
 
 export const catalog={skills:[...skills,...professionalSkills].map(name=>({_id:slug(name),name,category:'Professional',description:`Useful career skill: ${name}.`,aliases:[]})),careers};
 export const store={
@@ -23,7 +27,11 @@ export const store={
   saveRoadmap:roadmap=>{roadmaps.set(roadmap._id,roadmap);return roadmap;},
   findCareer:idOrSlug=>careers.find(career=>career._id===idOrSlug||career.slug===idOrSlug),
   saveConversation:conversation=>conversations.push(conversation),
-  newId:id
+  newId:id,
+  interviewSessions,
+  projectAnalyses,
+  resumeAnalyses,
+  learningCaches
 };
 
 export function createStudent(data){return store.saveStudent({_id:id(),...data});}

@@ -127,6 +127,43 @@ export async function assessment(context) {
   return output;
 }
 
+export async function extractResumeWithAI(resumeText, targetCareer) {
+  const output = await json(
+    'Analyze only the actual resume text supplied by the user. Extract only facts explicitly supported by that text; do not infer or invent skills, projects, education, experience, certifications, internships, technologies, achievements, or a name. For every extracted item, include a verbatim evidence excerpt copied from the resume. Return strict JSON with exactly these fields: {name:string|null,skills:[{name:string,confidence:number,evidence:string}],projects:[{name:string,technologies:string[],evidence:string}],education:[{evidence:string}],experience:[{evidence:string}],certifications:[{name:string,evidence:string}],internships:[{evidence:string}],achievements:[{evidence:string}]}.',
+    { resumeText, targetCareer }
+  );
+  const arrays = ['skills', 'projects', 'education', 'experience', 'certifications', 'internships', 'achievements'];
+  if (!(output.name === null || typeof output.name === 'string') || arrays.some((key) => !Array.isArray(output[key]))) {
+    throw new Error('AI returned an invalid resume analysis.');
+  }
+  for (const key of arrays) {
+    if (output[key].some((item) => !item || typeof item !== 'object' || typeof item.evidence !== 'string')) {
+      throw new Error('AI returned resume items without evidence.');
+    }
+  }
+  if (output.skills.some((item) => typeof item.name !== 'string' || typeof item.confidence !== 'number') ||
+      output.projects.some((item) => typeof item.name !== 'string' || !Array.isArray(item.technologies)) ||
+      output.certifications.some((item) => typeof item.name !== 'string')) {
+    throw new Error('AI returned resume fields with invalid types.');
+  }
+  return output;
+}
+
+export async function evaluateInterviewAnswer(context) {
+  const output = await json(
+    'You are evaluating a candidate answer to one interview question. Analyze only the exact answer provided. Do not invent statements, examples, experience, or knowledge that are not in the answer. Assess correctness and relevance to the question, completeness, reasoning, specificity, and communication. A short answer such as "I do not know" must receive low scores and feedback that acknowledges the answer did not explain a solution; never reward it for content it does not contain. Return strict JSON: {score:number,communicationScore:number,feedback:string,strengths:string[],weaknesses:string[]}. Both scores must be integers from 0 to 100. Feedback must refer to concrete content or omissions in this answer. Strengths may be empty. Provide actionable weaknesses when the answer is incomplete.',
+    context
+  );
+  const validScore = (score) => Number.isInteger(score) && score >= 0 && score <= 100;
+  if (!validScore(output.score) || !validScore(output.communicationScore) ||
+      typeof output.feedback !== 'string' || !output.feedback.trim() ||
+      !Array.isArray(output.strengths) || !output.strengths.every((item) => typeof item === 'string') ||
+      !Array.isArray(output.weaknesses) || !output.weaknesses.every((item) => typeof item === 'string')) {
+    throw new Error('AI returned an invalid interview evaluation.');
+  }
+  return output;
+}
+
 export async function careerSuggestions(context) {
   const output = await json(
     'You are a practical career discovery assistant. Compare the student profile with the supplied possible careers. Return simple JSON: {careers:[{name:string,fit:number,reason:string,skillsToBuild:string[]}]}. Return up to 5 careers, sort best fit first, use scores from 0 to 100, and use short plain-language explanations. Do not invent employers, salaries, URLs, or guarantees.',
