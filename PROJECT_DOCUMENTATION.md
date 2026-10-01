@@ -70,6 +70,10 @@ Students preview questions for their chosen role, answer them, and receive feedb
 
 Skill gaps become practical phases. Each phase explains what to learn, what to practise, and what evidence or project work to build. A professional roadmap report can be saved as a searchable, link-enabled PDF.
 
+### YouTube Learning Highlight
+
+Students can discover role-relevant tutorials for a selected skill, level, and career target through the optional YouTube learning integration. [Explore the YouTube learning hub](https://www.youtube.com/) to see the learning source used by the platform.
+
 ---
 
 ## Product experience
