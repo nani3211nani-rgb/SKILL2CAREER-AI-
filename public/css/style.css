@@ -1081,7 +1081,7 @@ input:focus, select:focus, textarea:focus { border-color: #5c9ce8; box-shadow: 0
 .landing-feature-pills span:nth-child(2) i { color: #d97706; }
 .landing-feature-pills span:nth-child(3) i { color: #ff0000; }
 .landing-feature-pills span:nth-child(4) i { color: #2563eb; }
-.landing-feature-pills span:nth-child(5) i { color: #7c3aed; }
+.landing-feature-pills span:nth-child(5) i { color: #111827; }
 .landing-feature-pills span:hover, .landing-feature-pills span:focus-within {
   transform: translateY(-3px);
   border-color: #9dd8cc;
