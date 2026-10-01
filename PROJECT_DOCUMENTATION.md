@@ -1,8 +1,6 @@
-# Skill2Career AI
+<div class="pdf-brand"><span>Skill2Career</span> AI</div>
 
-## Career clarity, built for the next move.
-
-**Career Readiness and Skill-Gap Platform**
+# Career Readiness and Skill-Gap Platform
 
 **Developed by**<br>
 Poorna Chander | Srinidhi | Shiwani

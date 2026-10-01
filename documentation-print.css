@@ -3,6 +3,8 @@
   margin: 10mm 12mm 12mm;
 }
 
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap");
+
 :root {
   --navy: #112d46;
   --blue: #1769e0;
@@ -29,7 +31,8 @@ body {
   padding: 0;
   color: var(--ink);
   background: #fff;
-  font-family: "Avenir Next", Avenir, Helvetica, Arial, sans-serif;
+  font-family:
+    "Space Grotesk", "Avenir Next", Avenir, Helvetica, Arial, sans-serif;
   font-size: 9.2pt;
   line-height: 1.38;
   -webkit-print-color-adjust: exact;
@@ -37,7 +40,7 @@ body {
 }
 
 body::before {
-  content: "SKILL2CAREER AI  /  PROJECT DOCUMENTATION";
+  content: "PROJECT DOCUMENTATION  /  VJIAS";
   display: block;
   padding: 3mm 0 2mm;
   border-bottom: 1px solid var(--line);
@@ -47,13 +50,28 @@ body::before {
   letter-spacing: 0.16em;
 }
 
+.pdf-brand {
+  padding: 7mm 0 5mm;
+  color: var(--teal);
+  font-family:
+    "Space Grotesk", "Avenir Next", Avenir, Helvetica, Arial, sans-serif;
+  font-size: 22pt;
+  font-weight: 700;
+  letter-spacing: -0.06em;
+}
+
+.pdf-brand span {
+  color: var(--blue);
+}
+
 h1 {
   min-height: 76mm;
   margin: 0;
   padding: 22mm 12mm 9mm;
   color: #fff;
   background: linear-gradient(135deg, var(--navy), #155a73 58%, var(--teal));
-  font-family: "Avenir Next", Avenir, Helvetica, Arial, sans-serif;
+  font-family:
+    "Space Grotesk", "Avenir Next", Avenir, Helvetica, Arial, sans-serif;
   font-size: 33pt;
   line-height: 1.02;
   letter-spacing: -0.04em;
@@ -65,7 +83,8 @@ h1::after {
   display: block;
   margin-top: 8mm;
   color: #c9f1e7;
-  font-family: "Avenir Next", Avenir, Helvetica, Arial, sans-serif;
+  font-family:
+    "Space Grotesk", "Avenir Next", Avenir, Helvetica, Arial, sans-serif;
   font-size: 11pt;
   font-weight: 500;
   line-height: 1.4;
@@ -73,22 +92,13 @@ h1::after {
   white-space: pre;
 }
 
-h1::before {
-  content: "SKILL2CAREER AI";
-  display: block;
-  margin-bottom: 12mm;
-  color: #8be2d0;
-  font-size: 8pt;
-  font-weight: 800;
-  letter-spacing: 0.2em;
-}
-
 h2 {
   margin: 7mm 0 3mm;
   padding-bottom: 1.5mm;
   border-bottom: 2px solid var(--teal);
   color: var(--navy);
-  font-family: "Avenir Next", Avenir, Helvetica, Arial, sans-serif;
+  font-family:
+    "Space Grotesk", "Avenir Next", Avenir, Helvetica, Arial, sans-serif;
   font-size: 16pt;
   line-height: 1.1;
   page-break-after: avoid;
